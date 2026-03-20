@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Master File & ID Generator v6.2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        background-color: #020617;
+        color: #f1f5f9;
+        font-family: "Inter", sans-serif;
+      }
+      .glass-card {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .code-font {
+        font-family: "Fira Code", monospace;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .btn-primary:hover {
+        filter: brightness(1.2);
+        transform: translateY(-2px);
+        box-shadow: 0 0 40px rgba(124, 58, 237, 0.4);
+      }
+      .input-field {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid #334155;
+        color: #f1f5f9;
+        transition: all 0.2s;
+      }
+      .input-field:focus {
+        border-color: #818cf8;
+        background: rgba(30, 41, 59, 0.7);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
+      }
+      .tab-btn {
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+        opacity: 0.5;
+      }
+      .tab-btn.active {
+        border-color: #818cf8;
+        color: #818cf8;
+        opacity: 1;
+      }
+      .copy-toast {
+        visibility: hidden;
+        background: #10b981;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        opacity: 0;
+        transition: all 0.4s;
+      }
+      .copy-toast.show {
+        visibility: visible;
+        opacity: 1;
+        bottom: 40px;
+      }
+      .custom-scroll::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scroll::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 10px;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen py-8 px-4 flex flex-col items-center">
+    <div class="w-full max-w-5xl">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-5xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-blue-400 via-indigo-400 to-purple-500">PRO NAMING ENGINE v6.2</h1>
+        <p class="text-slate-400 mt-2 font-medium">Volledig flexibel: nu ook met eigen status opties.</p>
+      </div>
+
+      <!-- Tab Navigatie -->
+      <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8 border-b border-slate-800 overflow-x-auto pb-2 no-scrollbar">
+        <button onclick="switchTab('school')" id="tab-school" class="tab-btn active px-4 pb-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">🎓 School</button>
+        <button onclick="switchTab('werk')" id="tab-werk" class="tab-btn px-4 pb-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">💼 Werk</button>
+        <button onclick="switchTab('dev')" id="tab-dev" class="tab-btn px-4 pb-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">💻 Dev</button>
+        <button onclick="switchTab('media')" id="tab-media" class="tab-btn px-4 pb-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">🎞️ Media</button>
+        <button onclick="switchTab('audio')" id="tab-audio" class="tab-btn px-4 pb-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">🎵 Audio</button>
+        <button onclick="switchTab('gaming')" id="tab-gaming" class="tab-btn px-4 pb-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">🎮 Gaming</button>
+        <button onclick="switchTab('random')" id="tab-random" class="tab-btn px-4 pb-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">🎲 Random</button>
+      </div>
+
+      <div class="glass-card rounded-[2.5rem] p-6 md:p-10 shadow-2xl">
+        <!-- SCHOOL TAB -->
+        <div id="content-school" class="tab-content space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Naam Leerling</label>
+              <input type="text" id="sch-name" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Vak</label>
+              <input type="text" id="sch-sub" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Opdracht</label>
+              <input type="text" id="sch-title" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Periode</label>
+              <input type="text" id="sch-block" placeholder="Bv. P1" class="input-field w-full p-3 rounded-xl text-sm" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Groepsnaam</label>
+              <input type="text" id="sch-group" placeholder="Bv. Team_A" class="input-field w-full p-3 rounded-xl text-sm" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Docent</label>
+              <input type="text" id="sch-teacher" placeholder="Bv. Jansen" class="input-field w-full p-3 rounded-xl text-sm" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Status</label>
+              <div class="flex flex-col gap-2">
+                <select id="sch-status-opt" class="input-field w-full p-3 rounded-xl text-sm" onchange="toggleCustom('sch-status')">
+                  <option value="">Geen Status</option>
+                  <option value="DRAFT">Concept (Draft)</option>
+                  <option value="REVIEW">Ter Beoordeling</option>
+                  <option value="CORRECTED">Verbeterd</option>
+                  <option value="FINAL">Definitief</option>
+                  <option value="SUBMITTED">Ingeleverd</option>
+                  <option value="CUSTOM">Eigen tekst...</option>
+                </select>
+                <input type="text" id="sch-status-custom" placeholder="Typ status..." class="input-field w-full p-3 rounded-xl text-sm hidden" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WERK TAB -->
+        <div id="content-werk" class="tab-content hidden space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Bedrijf / Klant</label>
+              <input type="text" id="wrk-client" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Projectnaam</label>
+              <input type="text" id="wrk-project" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Type Bestand</label>
+              <select id="wrk-type" class="input-field w-full p-3 rounded-xl text-sm">
+                <option value="">Geen Type</option>
+                <option value="INV">Factuur</option>
+                <option value="QUO">Offerte</option>
+                <option value="REP">Rapport</option>
+                <option value="CONT">Contract</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Prioriteit</label>
+              <select id="wrk-prio" class="input-field w-full p-3 rounded-xl text-sm">
+                <option value="">Geen</option>
+                <option value="URGENT">Urgent 🚨</option>
+                <option value="NORMAL">Normaal</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Status</label>
+              <div class="flex flex-col gap-2">
+                <select id="wrk-status-opt" class="input-field w-full p-3 rounded-xl text-sm" onchange="toggleCustom('wrk-status')">
+                  <option value="">Geen Status</option>
+                  <option value="PENDING">Wachtend</option>
+                  <option value="APPROVED">Goedgekeurd</option>
+                  <option value="PAID">Betaald</option>
+                  <option value="CUSTOM">Eigen tekst...</option>
+                </select>
+                <input type="text" id="wrk-status-custom" placeholder="Typ status..." class="input-field w-full p-3 rounded-xl text-sm hidden" />
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">ID Nummer</label>
+              <input type="text" id="wrk-id" placeholder="Bv. ID-001" class="input-field w-full p-3 rounded-xl text-sm" />
+            </div>
+          </div>
+        </div>
+
+        <!-- SHARED CONTROLS -->
+        <div class="mt-8 pt-8 border-t border-slate-800/50 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="space-y-2">
+              <label class="text-[10px] font-black text-indigo-400 uppercase tracking-widest text-center block">Slimme Versie</label>
+              <div class="flex gap-2">
+                <select id="global-ver-opt" class="input-field flex-1 p-3 rounded-xl text-sm" onchange="toggleCustom('global-ver')">
+                  <option value="">Geen Versie</option>
+                  <option value="v1">v1</option>
+                  <option value="v2">v2</option>
+                  <option value="DRAFT">Draft</option>
+                  <option value="FINAL">Final</option>
+                  <option value="CUSTOM">Eigen tekst...</option>
+                </select>
+                <input type="text" id="global-ver-custom" placeholder="Bv. v1.2" class="input-field flex-1 p-3 rounded-xl text-sm hidden" />
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label class="text-[10px] font-black text-indigo-400 uppercase tracking-widest text-center block">Unieke Suffix (ID)</label>
+              <select id="global-suffix" class="input-field w-full p-3 rounded-xl text-sm">
+                <option value="none">Geen extra ID</option>
+                <option value="short">Kort (4 tekens)</option>
+                <option value="mid">Middel (8 tekens)</option>
+                <option value="time">Tijd (UUMM)</option>
+                <option value="uuid">UUID v4</option>
+              </select>
+            </div>
+            <div class="space-y-2">
+              <label class="text-[10px] font-black text-indigo-400 uppercase tracking-widest text-center block">Bestandsextensie</label>
+              <select id="global-ext" class="input-field w-full p-3 rounded-xl text-sm">
+                <option value="">Geen extensie</option>
+                <option value=".pdf">.pdf</option>
+                <option value=".docx">.docx</option>
+                <option value=".png">.png</option>
+                <option value=".zip">.zip</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEV, MEDIA, AUDIO, GAMING, RANDOM (Ingekort) -->
+        <div id="content-dev" class="tab-content hidden pt-4"><input type="text" id="dev-repo" placeholder="Repo Naam" class="input-field w-full p-3 rounded-xl text-sm" /></div>
+        <div id="content-media" class="tab-content hidden pt-4"><input type="text" id="med-event" placeholder="Event" class="input-field w-full p-3 rounded-xl text-sm" /></div>
+        <div id="content-audio" class="tab-content hidden pt-4"><input type="text" id="aud-artist" placeholder="Artiest" class="input-field w-full p-3 rounded-xl text-sm" /></div>
+        <div id="content-gaming" class="tab-content hidden pt-4"><input type="text" id="gam-name" placeholder="Game" class="input-field w-full p-3 rounded-xl text-sm" /></div>
+        <div id="content-random" class="tab-content hidden pt-4">
+          <select id="rnd-type" class="input-field w-full p-3 rounded-xl text-sm">
+            <option value="uuid">UUID v4</option>
+          </select>
+        </div>
+
+        <!-- Global Controls -->
+        <div class="mt-10 pt-10 border-t border-slate-800/50 space-y-8">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="space-y-2">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Separator</label>
+              <div class="flex gap-2">
+                <button onclick="setDelim('_')" class="delim-btn flex-1 p-2 bg-slate-800 rounded-lg active border border-indigo-500">_</button>
+                <button onclick="setDelim('-')" class="delim-btn flex-1 p-2 bg-slate-800 rounded-lg border border-transparent">-</button>
+                <button onclick="setDelim('.')" class="delim-btn flex-1 p-2 bg-slate-800 rounded-lg border border-transparent">.</button>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Datum</label>
+              <input type="date" id="global-date-val" class="input-field w-full p-2 rounded-lg text-xs" />
+            </div>
+            <div class="space-y-2">
+              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Aantal</label>
+              <input type="number" id="gen-count" value="1" min="1" class="input-field w-full p-2 rounded-lg text-center font-bold" />
+            </div>
+            <div class="flex items-end">
+              <button onclick="generate()" class="w-full btn-primary py-4 rounded-2xl text-white font-black text-sm uppercase tracking-widest flex items-center justify-center gap-2">🚀 Genereer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsWrapper" class="hidden mt-12 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">Resultaten</span>
+            <button onclick="copyAll()" class="text-[10px] font-bold text-slate-400 hover:text-white transition-all uppercase">Alles Kopiëren</button>
+          </div>
+          <div id="resultsList" class="space-y-2 max-h-72 overflow-y-auto pr-2 custom-scroll"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="copy-toast shadow-2xl font-black text-xs uppercase tracking-widest">✓ Gekopieerd!</div>
+
+    <script>
+      let currentTab = "school";
+      let delimiter = "_";
+
+      function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach((c) => c.classList.add("hidden"));
+        document.getElementById(`tab-${tab}`).classList.add("active");
+        document.getElementById(`content-${tab}`).classList.remove("hidden");
+      }
+
+      function toggleCustom(idPrefix) {
+        const select = document.getElementById(`${idPrefix}-opt`);
+        const custom = document.getElementById(`${idPrefix}-custom`);
+        if (select && custom) {
+          custom.classList.toggle("hidden", select.value !== "CUSTOM");
+        }
+      }
+
+      function setDelim(d) {
+        delimiter = d;
+        document.querySelectorAll(".delim-btn").forEach((b) => {
+          b.classList.remove("border-indigo-500");
+          if (b.innerText === d) b.classList.add("border-indigo-500");
+        });
+      }
+
+      function randID(len) {
+        const c = "abcdef0123456789";
+        let r = "";
+        for (let i = 0; i < len; i++) r += c.charAt(Math.floor(Math.random() * c.length));
+        return r;
+      }
+
+      function getVal(idPrefix) {
+        const opt = document.getElementById(`${idPrefix}-opt`);
+        if (!opt) return null;
+        if (opt.value === "CUSTOM") {
+          const custom = document.getElementById(`${idPrefix}-custom`).value;
+          return custom && custom.trim() !== "" ? custom.trim().replace(/\s+/g, delimiter) : null;
+        }
+        return opt.value !== "" ? opt.value : null;
+      }
+
+      function generate() {
+        const count = parseInt(document.getElementById("gen-count").value) || 1;
+        const list = document.getElementById("resultsList");
+        document.getElementById("resultsWrapper").classList.remove("hidden");
+        list.innerHTML = "";
+
+        for (let i = 0; i < count; i++) {
+          let p = [];
+          const cl = (val) => (val && val.trim() !== "" ? val.trim().replace(/\s+/g, delimiter) : null);
+
+          if (currentTab === "school") {
+            p.push(cl(document.getElementById("sch-name").value));
+            p.push(cl(document.getElementById("sch-sub").value));
+            p.push(cl(document.getElementById("sch-title").value));
+            p.push(cl(document.getElementById("sch-block").value));
+            p.push(cl(document.getElementById("sch-group").value));
+            p.push(cl(document.getElementById("sch-teacher").value));
+            p.push(getVal("sch-status"));
+          } else if (currentTab === "werk") {
+            p.push(cl(document.getElementById("wrk-client").value));
+            p.push(cl(document.getElementById("wrk-project").value));
+            p.push(cl(document.getElementById("wrk-type").value));
+            p.push(cl(document.getElementById("wrk-prio").value));
+            p.push(getVal("wrk-status"));
+            p.push(cl(document.getElementById("wrk-id").value));
+          }
+
+          const dateVal = document.getElementById("global-date-val").value.replace(/-/g, "");
+          if (dateVal) p.push(dateVal);
+
+          p.push(getVal("global-ver"));
+
+          const suffix = document.getElementById("global-suffix").value;
+          if (suffix === "short") p.push(randID(4));
+          else if (suffix === "mid") p.push(randID(8));
+          else if (suffix === "time") {
+            const now = new Date();
+            p.push(now.getHours().toString().padStart(2, "0") + now.getMinutes().toString().padStart(2, "0"));
+          } else if (suffix === "uuid") p.push(crypto.randomUUID().slice(0, 8));
+
+          const ext = document.getElementById("global-ext").value;
+          if (p.filter(Boolean).length === 0 && !ext) p.push("naamloos");
+
+          let final = p.filter(Boolean).join(delimiter) + ext;
+          render(final);
+        }
+      }
+
+      function render(txt) {
+        const d = document.createElement("div");
+        d.className = "flex items-center justify-between bg-slate-800/40 p-3 rounded-xl border border-slate-700/50 group hover:border-indigo-500/50 transition-all";
+        d.innerHTML = `
+                <span class="code-font text-indigo-200 text-xs md:text-sm truncate pr-4">${txt}</span>
+                <button onclick="copy('${txt}')" class="p-2 text-slate-500 hover:text-white bg-slate-700/50 rounded-lg shrink-0 transition-all hover:bg-indigo-600">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+                </button>
+            `;
+        document.getElementById("resultsList").appendChild(d);
+      }
+
+      function copy(t) {
+        const ta = document.createElement("textarea");
+        ta.value = t;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        const ts = document.getElementById("toast");
+        ts.classList.add("show");
+        setTimeout(() => ts.classList.remove("show"), 2000);
+      }
+
+      function copyAll() {
+        const a = Array.from(document.querySelectorAll("#resultsList span"))
+          .map((s) => s.innerText)
+          .join("\n");
+        copy(a);
+      }
+    </script>
+  </body>
+</html>

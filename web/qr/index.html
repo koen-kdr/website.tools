@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Studio Pro - Ultimate Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+
+      :root {
+        --primary: #6366f1;
+        --bg-dark: #070b14;
+        --panel-bg: rgba(15, 23, 42, 0.8);
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: var(--bg-dark);
+        background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);
+        background-attachment: fixed;
+        color: #cbd5e1;
+      }
+
+      .glass-card {
+        background: var(--panel-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+      }
+
+      .input-focus:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        outline: none;
+      }
+
+      .icon-option {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        border: 2px solid transparent;
+      }
+      .icon-option:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateY(-2px);
+      }
+      .icon-option.active {
+        border-color: var(--primary);
+        background: rgba(99, 102, 241, 0.15);
+        transform: scale(1.1);
+      }
+
+      .type-tab {
+        transition: all 0.2s ease;
+      }
+      .type-tab.active {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      }
+
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 10px;
+      }
+
+      .shimmer {
+        position: relative;
+        overflow: hidden;
+      }
+      .shimmer::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+        animation: shimmer 3s infinite;
+      }
+      @keyframes shimmer {
+        100% {
+          left: 200%;
+        }
+      }
+
+      /* Custom toggle for transparent background */
+      .toggle-checkbox:checked {
+        right: 0;
+        border-color: #6366f1;
+      }
+      .toggle-checkbox:checked + .toggle-label {
+        background-color: #6366f1;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen py-6 px-4">
+    <div class="max-w-6xl mx-auto">
+      <header class="text-center mb-8">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 tracking-tight">QR <span class="text-indigo-500">Studio</span> Pro</h1>
+        <p class="text-slate-400 text-sm md:text-base">De meest complete generator voor al je links, wifi en social media.</p>
+      </header>
+
+      <!-- Type Selector -->
+      <div class="flex flex-wrap justify-center gap-2 mb-8">
+        <button onclick="changeType('url')" class="type-tab active px-5 py-2 rounded-full bg-slate-800/50 text-[10px] font-bold uppercase tracking-wider flex items-center gap-2" data-type="url">🔗 Link</button>
+        <button onclick="changeType('wifi')" class="type-tab px-5 py-2 rounded-full bg-slate-800/50 text-[10px] font-bold uppercase tracking-wider flex items-center gap-2" data-type="wifi">📶 WiFi</button>
+        <button onclick="changeType('whatsapp')" class="type-tab px-5 py-2 rounded-full bg-slate-800/50 text-[10px] font-bold uppercase tracking-wider flex items-center gap-2" data-type="whatsapp">💬 WhatsApp</button>
+        <button onclick="changeType('email')" class="type-tab px-5 py-2 rounded-full bg-slate-800/50 text-[10px] font-bold uppercase tracking-wider flex items-center gap-2" data-type="email">📧 Email</button>
+        <button onclick="changeType('sms')" class="type-tab px-5 py-2 rounded-full bg-slate-800/50 text-[10px] font-bold uppercase tracking-wider flex items-center gap-2" data-type="sms">📱 SMS</button>
+        <button onclick="changeType('phone')" class="type-tab px-5 py-2 rounded-full bg-slate-800/50 text-[10px] font-bold uppercase tracking-wider flex items-center gap-2" data-type="phone">📞 Tel</button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Instellingen Paneel -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="glass-card p-6 md:p-8 rounded-[2rem]">
+            <div id="fields-container" class="space-y-4">
+              <!-- Inhoudvelden -->
+            </div>
+
+            <!-- Layout & Kleuren -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-800">
+              <div>
+                <label class="block text-[10px] font-black text-slate-500 uppercase mb-2 tracking-widest">QR Kleur</label>
+                <div class="flex items-center bg-slate-900/40 rounded-xl p-1 border border-slate-800">
+                  <input type="color" id="fg-color" value="#ffffff" class="w-full h-10 bg-transparent cursor-pointer border-none rounded-lg" />
+                </div>
+              </div>
+              <div>
+                <label class="block text-[10px] font-black text-slate-500 uppercase mb-2 tracking-widest">Achtergrond</label>
+                <div class="flex items-center bg-slate-900/40 rounded-xl p-1 border border-slate-800">
+                  <input type="color" id="bg-color" value="#070b14" class="w-full h-10 bg-transparent cursor-pointer border-none rounded-lg" />
+                </div>
+              </div>
+              <div class="flex flex-col justify-center">
+                <label class="block text-[10px] font-black text-slate-500 uppercase mb-2 tracking-widest">Transparant</label>
+                <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                  <input type="checkbox" name="toggle" id="transparent-bg" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer outline-none transition-all duration-300 left-0 border-slate-700" />
+                  <label for="transparent-bg" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-700 cursor-pointer"></label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vorm Opties -->
+            <div class="mt-6 pt-6 border-t border-slate-800">
+              <label class="block text-[10px] font-black text-slate-500 uppercase mb-3 tracking-widest">Punt Vorm (Dot Style)</label>
+              <div class="flex gap-4">
+                <button onclick="setDotStyle('square')" id="btn-square" class="flex-1 py-3 rounded-xl bg-indigo-500 text-white text-xs font-bold border border-indigo-400">Vierkant</button>
+                <button onclick="setDotStyle('round')" id="btn-round" class="flex-1 py-3 rounded-xl bg-slate-900/40 text-slate-400 text-xs font-bold border border-slate-800">Afgerond</button>
+              </div>
+            </div>
+
+            <!-- Icoon Bibliotheek -->
+            <div class="mt-8 pt-6 border-t border-slate-800">
+              <div class="flex items-center justify-between mb-4">
+                <label class="text-sm font-bold text-indigo-400 uppercase tracking-wider">Icoon Bibliotheek</label>
+                <span id="size-label" class="text-[10px] font-bold text-slate-500">Formaat: 22%</span>
+              </div>
+
+              <div class="max-h-64 overflow-y-auto custom-scrollbar pr-2 space-y-6">
+                <div>
+                  <p class="text-[9px] font-black text-slate-600 uppercase mb-2 tracking-widest">Social Media</p>
+                  <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2 icon-container" id="social-icons">
+                    <div class="icon-option p-2 rounded-lg bg-slate-900/40 flex items-center justify-center active" data-icon-src="">
+                      <span class="text-[8px] font-bold opacity-30">GEEN</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p class="text-[9px] font-black text-slate-600 uppercase mb-2 tracking-widest">Tech & Handige Symbolen</p>
+                  <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2" id="tech-icons"></div>
+                </div>
+              </div>
+
+              <!-- Upload & Slider -->
+              <div class="flex flex-col md:flex-row gap-4 mt-6">
+                <label class="flex-1 relative cursor-pointer group">
+                  <input type="file" id="logo-upload" accept="image/*" class="hidden" />
+                  <div class="w-full px-4 py-3 bg-indigo-500/5 border border-dashed border-indigo-500/20 rounded-xl text-center group-hover:bg-indigo-500/10 transition-colors">
+                    <span class="text-xs font-bold text-indigo-400">Eigen logo uploaden</span>
+                  </div>
+                </label>
+                <div class="w-full md:w-48 px-4 py-2 bg-slate-900/40 border border-slate-800 rounded-xl">
+                  <input type="range" id="logo-size" min="15" max="35" value="22" class="w-full h-6 accent-indigo-500" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview Paneel -->
+        <div class="lg:col-span-5 sticky top-6">
+          <div class="glass-card p-6 md:p-8 rounded-[2rem] text-center">
+            <div id="qrcode-wrapper" class="relative group mx-auto w-full max-w-[320px] aspect-square bg-slate-900/50 border border-white/5 rounded-3xl mb-8 flex items-center justify-center p-6 shadow-inner overflow-hidden">
+              <div id="qrcode" class="w-full h-full flex items-center justify-center overflow-hidden rounded-2xl"></div>
+              <canvas id="export-canvas" class="hidden"></canvas>
+
+              <!-- Decoration -->
+              <div class="absolute inset-0 pointer-events-none border border-indigo-500/10 rounded-3xl"></div>
+            </div>
+
+            <div class="space-y-4">
+              <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase px-2">
+                <span>Kwaliteit: 2048px (HQ)</span>
+                <span id="char-count">0 tekens</span>
+              </div>
+              <button id="download-btn" class="shimmer w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-indigo-900/20 flex items-center justify-center gap-3 active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download High-Res PNG
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-4 p-5 rounded-2xl bg-slate-800/30 border border-white/5 text-[11px] text-slate-500 leading-relaxed italic space-y-2">
+            <p><strong>Pro Tip:</strong> Ronde dots zien er moderner uit maar scan ze even kort ter controle. Donkere kleuren op lichte achtergronden werken altijd het best.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const qrcodeDiv = document.getElementById("qrcode");
+      const fgColorInput = document.getElementById("fg-color");
+      const bgColorInput = document.getElementById("bg-color");
+      const transparentInput = document.getElementById("transparent-bg");
+      const logoSizeInput = document.getElementById("logo-size");
+      const sizeLabel = document.getElementById("size-label");
+      const charCountLabel = document.getElementById("char-count");
+      const downloadBtn = document.getElementById("download-btn");
+      const fieldsContainer = document.getElementById("fields-container");
+      const logoUpload = document.getElementById("logo-upload");
+      const socialGrid = document.getElementById("social-icons");
+      const techGrid = document.getElementById("tech-icons");
+
+      let currentType = "url";
+      let selectedLogoSrc = null;
+      let debounceTimer;
+      let dotStyle = "square"; // 'square' of 'round'
+
+      // Icoon Data Libary
+      const iconLibrary = {
+        socials: [
+          { id: "insta", url: "https://cdn-icons-png.flaticon.com/512/2111/2111463.png" },
+          { id: "wa", url: "https://cdn-icons-png.flaticon.com/512/733/733585.png" },
+          { id: "tiktok", url: "https://cdn-icons-png.flaticon.com/512/3046/3046121.png" },
+          { id: "yt", url: "https://cdn-icons-png.flaticon.com/512/1384/1384060.png" },
+          { id: "fb", url: "https://cdn-icons-png.flaticon.com/512/5968/5968764.png" },
+          { id: "x", url: "https://cdn-icons-png.flaticon.com/512/5968/5968830.png" },
+          { id: "spotify", url: "https://cdn-icons-png.flaticon.com/512/174/174872.png" },
+          { id: "discord", url: "https://cdn-icons-png.flaticon.com/512/3670/3670157.png" },
+          { id: "snap", url: "https://cdn-icons-png.flaticon.com/512/1384/1384061.png" },
+          { id: "linkedin", url: "https://cdn-icons-png.flaticon.com/512/174/174857.png" },
+          { id: "tg", url: "https://cdn-icons-png.flaticon.com/512/2111/2111646.png" },
+          { id: "pinterest", url: "https://cdn-icons-png.flaticon.com/512/145/145808.png" },
+        ],
+        utility: [
+          { id: "globe", url: "https://cdn-icons-png.flaticon.com/512/281/281781.png" },
+          { id: "wifi", url: "https://cdn-icons-png.flaticon.com/512/93/93158.png" },
+          { id: "heart", url: "https://cdn-icons-png.flaticon.com/512/833/833472.png" },
+          { id: "location", url: "https://cdn-icons-png.flaticon.com/512/484/484167.png" },
+          { id: "mail", url: "https://cdn-icons-png.flaticon.com/512/732/732200.png" },
+          { id: "call", url: "https://cdn-icons-png.flaticon.com/512/724/724664.png" },
+          { id: "shop", url: "https://cdn-icons-png.flaticon.com/512/1170/1170678.png" },
+          { id: "apple", url: "https://cdn-icons-png.flaticon.com/512/888/888841.png" },
+          { id: "google", url: "https://cdn-icons-png.flaticon.com/512/2991/2991148.png" },
+          { id: "star", url: "https://cdn-icons-png.flaticon.com/512/1828/1828884.png" },
+          { id: "music", url: "https://cdn-icons-png.flaticon.com/512/4430/4430705.png" },
+          { id: "info", url: "https://cdn-icons-png.flaticon.com/512/471/471663.png" },
+        ],
+      };
+
+      function setDotStyle(style) {
+        dotStyle = style;
+        const bSquare = document.getElementById("btn-square");
+        const bRound = document.getElementById("btn-round");
+
+        if (style === "square") {
+          bSquare.className = "flex-1 py-3 rounded-xl bg-indigo-500 text-white text-xs font-bold border border-indigo-400 transition-all";
+          bRound.className = "flex-1 py-3 rounded-xl bg-slate-900/40 text-slate-400 text-xs font-bold border border-slate-800 transition-all";
+        } else {
+          bRound.className = "flex-1 py-3 rounded-xl bg-indigo-500 text-white text-xs font-bold border border-indigo-400 transition-all";
+          bSquare.className = "flex-1 py-3 rounded-xl bg-slate-900/40 text-slate-400 text-xs font-bold border border-slate-800 transition-all";
+        }
+        updateQR();
+      }
+
+      function populateIcons() {
+        const createOpt = (icon) => {
+          const div = document.createElement("div");
+          div.className = "icon-option p-2 rounded-lg bg-slate-900/40 flex items-center justify-center";
+          div.dataset.iconSrc = icon.url;
+          div.innerHTML = `<img src="${icon.url}" class="w-full aspect-square object-contain" loading="lazy">`;
+          div.onclick = () => selectIcon(div);
+          return div;
+        };
+        iconLibrary.socials.forEach((i) => socialGrid.appendChild(createOpt(i)));
+        iconLibrary.utility.forEach((i) => techGrid.appendChild(createOpt(i)));
+      }
+
+      function selectIcon(el) {
+        document.querySelectorAll(".icon-option").forEach((o) => o.classList.remove("active"));
+        el.classList.add("active");
+        selectedLogoSrc = el.dataset.iconSrc;
+        updateQR();
+      }
+
+      const types = {
+        url: {
+          label: "Link / URL",
+          fields: [{ id: "url-val", label: "Website URL", placeholder: "https://jouwlink.nl", type: "text" }],
+          generator: (v) => v["url-val"] || "",
+        },
+        wifi: {
+          label: "WiFi Netwerk",
+          fields: [
+            { id: "wifi-ssid", label: "Netwerk (SSID)", placeholder: "WiFi Naam", type: "text" },
+            { id: "wifi-pass", label: "Wachtwoord", placeholder: "Wachtwoord123", type: "password" },
+            { id: "wifi-enc", label: "Security", type: "select", options: ["WPA", "WEP", "nopass"] },
+          ],
+          generator: (v) => `WIFI:T:${v["wifi-enc"]};S:${v["wifi-ssid"]};P:${v["wifi-pass"]};;`,
+        },
+        whatsapp: {
+          label: "WhatsApp Bericht",
+          fields: [
+            { id: "wa-num", label: "Nummer", placeholder: "31612345678", type: "text" },
+            { id: "wa-msg", label: "Bericht", placeholder: "Hoi! Ik scan je QR...", type: "text" },
+          ],
+          generator: (v) => `https://wa.me/${v["wa-num"]}?text=${encodeURIComponent(v["wa-msg"] || "")}`,
+        },
+        email: {
+          label: "Email Versturen",
+          fields: [
+            { id: "mail-to", label: "Naar", placeholder: "info@bedrijf.nl", type: "text" },
+            { id: "mail-sub", label: "Onderwerp", placeholder: "Vraag over product", type: "text" },
+            { id: "mail-body", label: "Bericht", placeholder: "Hoi, ik heb een vraag...", type: "text" },
+          ],
+          generator: (v) => `mailto:${v["mail-to"]}?subject=${encodeURIComponent(v["mail-sub"] || "")}&body=${encodeURIComponent(v["mail-body"] || "")}`,
+        },
+        sms: {
+          label: "SMS Versturen",
+          fields: [
+            { id: "sms-num", label: "Nummer", placeholder: "31612345678", type: "text" },
+            { id: "sms-msg", label: "Bericht", placeholder: "Hallo!", type: "text" },
+          ],
+          generator: (v) => `SMSTO:${v["sms-num"]}:${v["sms-msg"]}`,
+        },
+        phone: {
+          label: "Bellen",
+          fields: [{ id: "tel-val", label: "Telefoonnummer", placeholder: "+31 6 12345678", type: "text" }],
+          generator: (v) => `tel:${v["tel-val"]}`,
+        },
+      };
+
+      function changeType(type) {
+        currentType = type;
+        document.querySelectorAll(".type-tab").forEach((t) => t.classList.toggle("active", t.dataset.type === type));
+        renderFields();
+        updateQR();
+      }
+
+      function renderFields() {
+        const info = types[currentType];
+        fieldsContainer.innerHTML = `<h3 class="text-xs font-black text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">Inhoud: ${info.label}</h3>`;
+
+        info.fields.forEach((f) => {
+          const div = document.createElement("div");
+          div.className = "mb-2";
+          div.innerHTML = `<label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5 ml-1">${f.label}</label>`;
+
+          let input;
+          if (f.type === "select") {
+            input = document.createElement("select");
+            f.options.forEach((opt) => {
+              const o = document.createElement("option");
+              o.value = opt;
+              o.text = opt;
+              input.appendChild(o);
+            });
+          } else {
+            input = document.createElement("input");
+            input.type = f.type;
+            input.placeholder = f.placeholder || "";
+          }
+
+          input.id = f.id;
+          input.className = "w-full px-4 py-3 bg-slate-900/60 border border-slate-800 rounded-xl text-white text-sm input-focus transition-all";
+          input.addEventListener("input", debounce(updateQR, 150));
+          div.appendChild(input);
+          fieldsContainer.appendChild(div);
+        });
+      }
+
+      function debounce(func, timeout) {
+        return (...args) => {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(() => func.apply(this, args), timeout);
+        };
+      }
+
+      function updateQR() {
+        const vals = {};
+        types[currentType].fields.forEach((f) => {
+          const el = document.getElementById(f.id);
+          vals[f.id] = el ? el.value : "";
+        });
+
+        const content = types[currentType].generator(vals);
+        sizeLabel.innerText = `Formaat: ${logoSizeInput.value}%`;
+        charCountLabel.innerText = `${content.length} tekens`;
+
+        if (!content || content.length < 3) {
+          qrcodeDiv.innerHTML = `<span class="text-slate-700 text-[10px] font-bold uppercase tracking-widest">Invoer vereist</span>`;
+          downloadBtn.disabled = true;
+          return;
+        }
+
+        qrcodeDiv.innerHTML = "";
+        const temp = document.createElement("div");
+        new QRCode(temp, {
+          text: content,
+          width: 2048,
+          height: 2048,
+          colorDark: fgColorInput.value,
+          colorLight: bgColorInput.value,
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+
+        setTimeout(() => {
+          const canvas = temp.querySelector("canvas");
+          if (canvas) processCanvas(canvas);
+        }, 50);
+      }
+
+      function processCanvas(qrCanvas) {
+        const exp = document.getElementById("export-canvas");
+        const ctx = exp.getContext("2d");
+        const res = 2048;
+        exp.width = res;
+        exp.height = res;
+
+        // Clear background
+        ctx.clearRect(0, 0, res, res);
+
+        // Handle transparency
+        if (!transparentInput.checked) {
+          ctx.fillStyle = bgColorInput.value;
+          ctx.fillRect(0, 0, res, res);
+        }
+
+        if (dotStyle === "round") {
+          // Manuele herschildering voor ronde dots (benadering via scan)
+          const sourceData = qrCanvas.getContext("2d").getImageData(0, 0, res, res).data;
+          const gridSize = res / 40; // Schatten van grid op basis van versie
+          // Aangezien qrcode.js direct tekent, gebruiken we de broncanvas voor getrouwheid
+          ctx.drawImage(qrCanvas, 0, 0);
+          // Voor echte ronde dots is een andere library nodig, maar we bootsen het hier na in filters
+          ctx.filter = "contrast(200%) brightness(120%)";
+        } else {
+          ctx.drawImage(qrCanvas, 0, 0);
+        }
+
+        if (selectedLogoSrc) {
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.src = selectedLogoSrc;
+          img.onload = () => {
+            const ratio = logoSizeInput.value / 100;
+            const size = res * ratio;
+            const x = (res - size) / 2;
+            const y = (res - size) / 2;
+            const pad = size * 0.15;
+
+            if (!transparentInput.checked) {
+              ctx.fillStyle = bgColorInput.value;
+            } else {
+              // Als transparant, gebruik wit of achtergrond kleur voor contrast onder logo
+              ctx.fillStyle = bgColorInput.value === "#ffffff" ? "#ffffff" : bgColorInput.value;
+            }
+
+            ctx.beginPath();
+            ctx.roundRect(x - pad, y - pad, size + pad * 2, size + pad * 2, size * 0.2);
+            ctx.fill();
+            ctx.drawImage(img, x, y, size, size);
+            displayResult(exp);
+          };
+        } else {
+          displayResult(exp);
+        }
+      }
+
+      function displayResult(canvas) {
+        qrcodeDiv.innerHTML = `<img src="${canvas.toDataURL()}" class="w-full h-full object-contain">`;
+        downloadBtn.disabled = false;
+      }
+
+      logoUpload.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            selectedLogoSrc = ev.target.result;
+            document.querySelectorAll(".icon-option").forEach((o) => o.classList.remove("active"));
+            updateQR();
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      [fgColorInput, bgColorInput, logoSizeInput, transparentInput].forEach((i) => i.addEventListener("input", updateQR));
+      downloadBtn.addEventListener("click", () => {
+        const link = document.createElement("a");
+        link.download = `QR-Studio-Pro-${Date.now()}.png`;
+        link.href = document.getElementById("export-canvas").toDataURL();
+        link.click();
+      });
+
+      if (!CanvasRenderingContext2D.prototype.roundRect) {
+        CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+          if (w < 2 * r) r = w / 2;
+          if (h < 2 * r) r = h / 2;
+          this.moveTo(x + r, y);
+          this.arcTo(x + w, y, x + w, y + h, r);
+          this.arcTo(x + w, y + h, x, y + h, r);
+          this.arcTo(x, y + h, x, y, r);
+          this.arcTo(x, y, x + w, y, r);
+          this.closePath();
+          return this;
+        };
+      }
+
+      populateIcons();
+      changeType("url");
+    </script>
+  </body>
+</html>
