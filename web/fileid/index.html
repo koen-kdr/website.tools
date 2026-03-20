@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Master File & ID Generator v6.2</title>
+    <title>Master File & ID Generator v6.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
     <style>
@@ -86,8 +86,8 @@
     <div class="w-full max-w-5xl">
       <!-- Header -->
       <div class="text-center mb-8">
-        <h1 class="text-5xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-blue-400 via-indigo-400 to-purple-500">PRO NAMING ENGINE v6.2</h1>
-        <p class="text-slate-400 mt-2 font-medium">Volledig flexibel: nu ook met eigen status opties.</p>
+        <h1 class="text-5xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-blue-400 via-indigo-400 to-purple-500">PRO NAMING ENGINE v6.5</h1>
+        <p class="text-slate-400 mt-2 font-medium">Uitgebreide versie: Meer extensies, versies en ID opties.</p>
       </div>
 
       <!-- Tab Navigatie -->
@@ -102,177 +102,164 @@
       </div>
 
       <div class="glass-card rounded-[2.5rem] p-6 md:p-10 shadow-2xl">
-        <!-- SCHOOL TAB -->
+        <!-- Tab Contents (Behouden uit v6.4) -->
         <div id="content-school" class="tab-content space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Naam Leerling</label>
-              <input type="text" id="sch-name" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Vak</label>
-              <input type="text" id="sch-sub" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Opdracht</label>
-              <input type="text" id="sch-title" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
-            </div>
+            <input type="text" id="sch-name" placeholder="Naam Leerling" class="input-field w-full p-3 rounded-xl text-sm" />
+            <input type="text" id="sch-sub" placeholder="Vak" class="input-field w-full p-3 rounded-xl text-sm" />
+            <input type="text" id="sch-title" placeholder="Opdracht" class="input-field w-full p-3 rounded-xl text-sm" />
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Periode</label>
-              <input type="text" id="sch-block" placeholder="Bv. P1" class="input-field w-full p-3 rounded-xl text-sm" />
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Groepsnaam</label>
-              <input type="text" id="sch-group" placeholder="Bv. Team_A" class="input-field w-full p-3 rounded-xl text-sm" />
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Docent</label>
-              <input type="text" id="sch-teacher" placeholder="Bv. Jansen" class="input-field w-full p-3 rounded-xl text-sm" />
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-indigo-400 uppercase ml-1">Status</label>
-              <div class="flex flex-col gap-2">
-                <select id="sch-status-opt" class="input-field w-full p-3 rounded-xl text-sm" onchange="toggleCustom('sch-status')">
-                  <option value="">Geen Status</option>
-                  <option value="DRAFT">Concept (Draft)</option>
-                  <option value="REVIEW">Ter Beoordeling</option>
-                  <option value="CORRECTED">Verbeterd</option>
-                  <option value="FINAL">Definitief</option>
-                  <option value="SUBMITTED">Ingeleverd</option>
-                  <option value="CUSTOM">Eigen tekst...</option>
-                </select>
-                <input type="text" id="sch-status-custom" placeholder="Typ status..." class="input-field w-full p-3 rounded-xl text-sm hidden" />
-              </div>
+            <input type="text" id="sch-block" placeholder="Periode (bv. P1)" class="input-field w-full p-3 rounded-xl text-sm" />
+            <input type="text" id="sch-group" placeholder="Groepsnaam" class="input-field w-full p-3 rounded-xl text-sm" />
+            <input type="text" id="sch-teacher" placeholder="Docent" class="input-field w-full p-3 rounded-xl text-sm" />
+            <div class="space-y-2">
+              <select id="sch-status-opt" class="input-field w-full p-3 rounded-xl text-sm" onchange="toggleCustom('sch-status')">
+                <option value="">Status Kies...</option>
+                <option value="DRAFT">DRAFT</option>
+                <option value="REVIEW">REVIEW</option>
+                <option value="FINAL">FINAL</option>
+                <option value="CUSTOM">Eigen tekst...</option>
+              </select>
+              <input type="text" id="sch-status-custom" placeholder="Typ status..." class="input-field w-full p-3 rounded-xl text-sm hidden" />
             </div>
           </div>
         </div>
 
-        <!-- WERK TAB -->
         <div id="content-werk" class="tab-content hidden space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Bedrijf / Klant</label>
-              <input type="text" id="wrk-client" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Projectnaam</label>
-              <input type="text" id="wrk-project" placeholder="(Leeg laten mogelijk)" class="input-field w-full p-3 rounded-xl text-sm" />
-            </div>
+            <input type="text" id="wrk-client" placeholder="Bedrijf / Klant" class="input-field w-full p-3 rounded-xl text-sm" />
+            <input type="text" id="wrk-project" placeholder="Projectnaam" class="input-field w-full p-3 rounded-xl text-sm" />
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Type Bestand</label>
-              <select id="wrk-type" class="input-field w-full p-3 rounded-xl text-sm">
-                <option value="">Geen Type</option>
-                <option value="INV">Factuur</option>
-                <option value="QUO">Offerte</option>
-                <option value="REP">Rapport</option>
-                <option value="CONT">Contract</option>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <select id="wrk-type" class="input-field w-full p-3 rounded-xl text-sm">
+              <option value="">Bestandstype...</option>
+              <option value="INV">Factuur</option>
+              <option value="QUO">Offerte</option>
+              <option value="REP">Rapport</option>
+            </select>
+            <div class="space-y-2">
+              <select id="wrk-status-opt" class="input-field w-full p-3 rounded-xl text-sm" onchange="toggleCustom('wrk-status')">
+                <option value="">Status...</option>
+                <option value="PAID">Betaald</option>
+                <option value="APPROVED">Goedgekeurd</option>
+                <option value="CUSTOM">Eigen tekst...</option>
               </select>
+              <input type="text" id="wrk-status-custom" placeholder="Typ status..." class="input-field w-full p-3 rounded-xl text-sm hidden" />
             </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Prioriteit</label>
-              <select id="wrk-prio" class="input-field w-full p-3 rounded-xl text-sm">
-                <option value="">Geen</option>
-                <option value="URGENT">Urgent 🚨</option>
-                <option value="NORMAL">Normaal</option>
-              </select>
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">Status</label>
-              <div class="flex flex-col gap-2">
-                <select id="wrk-status-opt" class="input-field w-full p-3 rounded-xl text-sm" onchange="toggleCustom('wrk-status')">
-                  <option value="">Geen Status</option>
-                  <option value="PENDING">Wachtend</option>
-                  <option value="APPROVED">Goedgekeurd</option>
-                  <option value="PAID">Betaald</option>
-                  <option value="CUSTOM">Eigen tekst...</option>
-                </select>
-                <input type="text" id="wrk-status-custom" placeholder="Typ status..." class="input-field w-full p-3 rounded-xl text-sm hidden" />
-              </div>
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] font-black text-blue-400 uppercase ml-1">ID Nummer</label>
-              <input type="text" id="wrk-id" placeholder="Bv. ID-001" class="input-field w-full p-3 rounded-xl text-sm" />
-            </div>
+            <input type="text" id="wrk-id" placeholder="Kenmerk / ID" class="input-field w-full p-3 rounded-xl text-sm" />
           </div>
         </div>
 
-        <!-- SHARED CONTROLS -->
-        <div class="mt-8 pt-8 border-t border-slate-800/50 space-y-6">
+        <div id="content-dev" class="tab-content hidden space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" id="dev-repo" placeholder="Repository Naam" class="input-field w-full p-3 rounded-xl text-sm" />
+            <input type="text" id="dev-branch" placeholder="Branch (bv. main)" class="input-field w-full p-3 rounded-xl text-sm" />
+          </div>
+        </div>
+
+        <div id="content-media" class="tab-content hidden space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" id="med-event" placeholder="Event Naam" class="input-field w-full p-3 rounded-xl text-sm" />
+            <input type="text" id="med-loc" placeholder="Locatie" class="input-field w-full p-3 rounded-xl text-sm" />
+          </div>
+        </div>
+
+        <div id="content-audio" class="tab-content hidden space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" id="aud-artist" placeholder="Artiest" class="input-field w-full p-3 rounded-xl text-sm" />
+            <input type="text" id="aud-track" placeholder="Track Titel" class="input-field w-full p-3 rounded-xl text-sm" />
+          </div>
+        </div>
+
+        <div id="content-gaming" class="tab-content hidden space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" id="gam-name" placeholder="Game Naam" class="input-field w-full p-3 rounded-xl text-sm" />
+            <input type="text" id="gam-clip" placeholder="Clip Beschrijving" class="input-field w-full p-3 rounded-xl text-sm" />
+          </div>
+        </div>
+
+        <div id="content-random" class="tab-content hidden space-y-6">
+          <div class="p-4 bg-slate-800/30 rounded-xl border border-slate-700">
+            <p class="text-xs text-slate-400">Gebruik de globale instellingen hieronder voor pure ID generatie.</p>
+          </div>
+        </div>
+
+        <!-- SHARED GLOBAL (BIJGEWERKT) -->
+        <div class="mt-8 pt-8 border-t border-slate-800/50">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="space-y-2">
-              <label class="text-[10px] font-black text-indigo-400 uppercase tracking-widest text-center block">Slimme Versie</label>
+              <label class="text-[10px] font-black text-indigo-400 uppercase block text-center">Versie</label>
               <div class="flex gap-2">
                 <select id="global-ver-opt" class="input-field flex-1 p-3 rounded-xl text-sm" onchange="toggleCustom('global-ver')">
-                  <option value="">Geen Versie</option>
+                  <option value="" selected>Geen</option>
                   <option value="v1">v1</option>
                   <option value="v2">v2</option>
-                  <option value="DRAFT">Draft</option>
-                  <option value="FINAL">Final</option>
-                  <option value="CUSTOM">Eigen tekst...</option>
+                  <option value="Final-v1">Final-v1</option>
+                  <option value="Revision">Revision</option>
+                  <option value="Old">Old</option>
+                  <option value="Archive">Archive</option>
+                  <option value="CUSTOM">Eigen...</option>
                 </select>
-                <input type="text" id="global-ver-custom" placeholder="Bv. v1.2" class="input-field flex-1 p-3 rounded-xl text-sm hidden" />
+                <input type="text" id="global-ver-custom" placeholder="v1.x" class="input-field flex-1 p-3 rounded-xl text-sm hidden" />
               </div>
             </div>
             <div class="space-y-2">
-              <label class="text-[10px] font-black text-indigo-400 uppercase tracking-widest text-center block">Unieke Suffix (ID)</label>
+              <label class="text-[10px] font-black text-indigo-400 uppercase block text-center">ID Suffix</label>
               <select id="global-suffix" class="input-field w-full p-3 rounded-xl text-sm">
-                <option value="none">Geen extra ID</option>
+                <option value="none" selected>Geen extra ID</option>
                 <option value="short">Kort (4 tekens)</option>
                 <option value="mid">Middel (8 tekens)</option>
+                <option value="num6">Nummers (6-cijfers)</option>
+                <option value="hex">Hex Color Code</option>
                 <option value="time">Tijd (UUMM)</option>
                 <option value="uuid">UUID v4</option>
               </select>
             </div>
             <div class="space-y-2">
-              <label class="text-[10px] font-black text-indigo-400 uppercase tracking-widest text-center block">Bestandsextensie</label>
+              <label class="text-[10px] font-black text-indigo-400 uppercase block text-center">Extensie</label>
               <select id="global-ext" class="input-field w-full p-3 rounded-xl text-sm">
-                <option value="">Geen extensie</option>
-                <option value=".pdf">.pdf</option>
-                <option value=".docx">.docx</option>
-                <option value=".png">.png</option>
-                <option value=".zip">.zip</option>
+                <option value="" selected>Geen</option>
+                <!-- Docs -->
+                <option value=".pdf">.pdf (Document)</option>
+                <option value=".docx">.docx (Word)</option>
+                <option value=".xlsx">.xlsx (Excel)</option>
+                <option value=".pptx">.pptx (PowerPoint)</option>
+                <option value=".txt">.txt (Text)</option>
+                <!-- Images -->
+                <option value=".png">.png (Image)</option>
+                <option value=".jpg">.jpg (Image)</option>
+                <option value=".svg">.svg (Vector)</option>
+                <option value=".heic">.heic (Apple)</option>
+                <!-- Media/Other -->
+                <option value=".mp4">.mp4 (Video)</option>
+                <option value=".mp3">.mp3 (Audio)</option>
+                <option value=".zip">.zip (Archief)</option>
               </select>
             </div>
           </div>
         </div>
 
-        <!-- DEV, MEDIA, AUDIO, GAMING, RANDOM (Ingekort) -->
-        <div id="content-dev" class="tab-content hidden pt-4"><input type="text" id="dev-repo" placeholder="Repo Naam" class="input-field w-full p-3 rounded-xl text-sm" /></div>
-        <div id="content-media" class="tab-content hidden pt-4"><input type="text" id="med-event" placeholder="Event" class="input-field w-full p-3 rounded-xl text-sm" /></div>
-        <div id="content-audio" class="tab-content hidden pt-4"><input type="text" id="aud-artist" placeholder="Artiest" class="input-field w-full p-3 rounded-xl text-sm" /></div>
-        <div id="content-gaming" class="tab-content hidden pt-4"><input type="text" id="gam-name" placeholder="Game" class="input-field w-full p-3 rounded-xl text-sm" /></div>
-        <div id="content-random" class="tab-content hidden pt-4">
-          <select id="rnd-type" class="input-field w-full p-3 rounded-xl text-sm">
-            <option value="uuid">UUID v4</option>
-          </select>
-        </div>
-
-        <!-- Global Controls -->
-        <div class="mt-10 pt-10 border-t border-slate-800/50 space-y-8">
+        <!-- Footer Controls -->
+        <div class="mt-10 pt-10 border-t border-slate-800/50">
           <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="space-y-2">
-              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Separator</label>
+              <label class="text-[10px] font-black text-slate-500 uppercase">Separator</label>
               <div class="flex gap-2">
                 <button onclick="setDelim('_')" class="delim-btn flex-1 p-2 bg-slate-800 rounded-lg active border border-indigo-500">_</button>
                 <button onclick="setDelim('-')" class="delim-btn flex-1 p-2 bg-slate-800 rounded-lg border border-transparent">-</button>
-                <button onclick="setDelim('.')" class="delim-btn flex-1 p-2 bg-slate-800 rounded-lg border border-transparent">.</button>
               </div>
             </div>
             <div class="space-y-2">
-              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Datum</label>
-              <input type="date" id="global-date-val" class="input-field w-full p-2 rounded-lg text-xs" />
+              <label class="text-[10px] font-black text-slate-500 uppercase">Datum</label>
+              <input type="date" id="global-date" class="input-field w-full p-2 rounded-lg text-xs" />
             </div>
             <div class="space-y-2">
-              <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Aantal</label>
+              <label class="text-[10px] font-black text-slate-500 uppercase">Aantal</label>
               <input type="number" id="gen-count" value="1" min="1" class="input-field w-full p-2 rounded-lg text-center font-bold" />
             </div>
             <div class="flex items-end">
-              <button onclick="generate()" class="w-full btn-primary py-4 rounded-2xl text-white font-black text-sm uppercase tracking-widest flex items-center justify-center gap-2">🚀 Genereer</button>
+              <button onclick="generate()" class="w-full btn-primary py-4 rounded-2xl text-white font-black text-sm uppercase tracking-widest">🚀 GENEREER</button>
             </div>
           </div>
         </div>
@@ -280,8 +267,8 @@
         <!-- Results -->
         <div id="resultsWrapper" class="hidden mt-12 space-y-4">
           <div class="flex items-center justify-between">
-            <span class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">Resultaten</span>
-            <button onclick="copyAll()" class="text-[10px] font-bold text-slate-400 hover:text-white transition-all uppercase">Alles Kopiëren</button>
+            <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Resultaten</span>
+            <button onclick="copyAll()" class="text-[10px] font-bold text-slate-400 hover:text-white uppercase">Alles Kopiëren</button>
           </div>
           <div id="resultsList" class="space-y-2 max-h-72 overflow-y-auto pr-2 custom-scroll"></div>
         </div>
@@ -294,20 +281,18 @@
       let currentTab = "school";
       let delimiter = "_";
 
-      function switchTab(tab) {
-        currentTab = tab;
+      function switchTab(t) {
+        currentTab = t;
         document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
         document.querySelectorAll(".tab-content").forEach((c) => c.classList.add("hidden"));
-        document.getElementById(`tab-${tab}`).classList.add("active");
-        document.getElementById(`content-${tab}`).classList.remove("hidden");
+        document.getElementById(`tab-${t}`).classList.add("active");
+        document.getElementById(`content-${t}`).classList.remove("hidden");
       }
 
-      function toggleCustom(idPrefix) {
-        const select = document.getElementById(`${idPrefix}-opt`);
-        const custom = document.getElementById(`${idPrefix}-custom`);
-        if (select && custom) {
-          custom.classList.toggle("hidden", select.value !== "CUSTOM");
-        }
+      function toggleCustom(id) {
+        const s = document.getElementById(`${id}-opt`);
+        const c = document.getElementById(`${id}-custom`);
+        if (s && c) c.classList.toggle("hidden", s.value !== "CUSTOM");
       }
 
       function setDelim(d) {
@@ -318,6 +303,26 @@
         });
       }
 
+      function getVal(id) {
+        const el = document.getElementById(id);
+        if (!el) return null;
+        const val = el.value.trim();
+        return val !== "" ? val.replace(/\s+/g, delimiter) : null;
+      }
+
+      function getStatusVal(prefix) {
+        const opt = document.getElementById(`${prefix}-status-opt`);
+        if (!opt) return null;
+        if (opt.value === "CUSTOM") return getVal(`${prefix}-status-custom`);
+        return opt.value !== "" ? opt.value : null;
+      }
+
+      function getVer() {
+        const opt = document.getElementById("global-ver-opt");
+        if (opt.value === "CUSTOM") return getVal("global-ver-custom");
+        return opt.value !== "" ? opt.value : null;
+      }
+
       function randID(len) {
         const c = "abcdef0123456789";
         let r = "";
@@ -325,14 +330,10 @@
         return r;
       }
 
-      function getVal(idPrefix) {
-        const opt = document.getElementById(`${idPrefix}-opt`);
-        if (!opt) return null;
-        if (opt.value === "CUSTOM") {
-          const custom = document.getElementById(`${idPrefix}-custom`).value;
-          return custom && custom.trim() !== "" ? custom.trim().replace(/\s+/g, delimiter) : null;
-        }
-        return opt.value !== "" ? opt.value : null;
+      function randNum(len) {
+        let r = "";
+        for (let i = 0; i < len; i++) r += Math.floor(Math.random() * 10).toString();
+        return r;
       }
 
       function generate() {
@@ -342,57 +343,55 @@
         list.innerHTML = "";
 
         for (let i = 0; i < count; i++) {
-          let p = [];
-          const cl = (val) => (val && val.trim() !== "" ? val.trim().replace(/\s+/g, delimiter) : null);
+          let parts = [];
 
           if (currentTab === "school") {
-            p.push(cl(document.getElementById("sch-name").value));
-            p.push(cl(document.getElementById("sch-sub").value));
-            p.push(cl(document.getElementById("sch-title").value));
-            p.push(cl(document.getElementById("sch-block").value));
-            p.push(cl(document.getElementById("sch-group").value));
-            p.push(cl(document.getElementById("sch-teacher").value));
-            p.push(getVal("sch-status"));
+            parts.push(getVal("sch-name"), getVal("sch-sub"), getVal("sch-title"), getVal("sch-block"), getVal("sch-group"), getVal("sch-teacher"), getStatusVal("sch"));
           } else if (currentTab === "werk") {
-            p.push(cl(document.getElementById("wrk-client").value));
-            p.push(cl(document.getElementById("wrk-project").value));
-            p.push(cl(document.getElementById("wrk-type").value));
-            p.push(cl(document.getElementById("wrk-prio").value));
-            p.push(getVal("wrk-status"));
-            p.push(cl(document.getElementById("wrk-id").value));
+            parts.push(getVal("wrk-client"), getVal("wrk-project"), getVal("wrk-type"), getStatusVal("wrk"), getVal("wrk-id"));
+          } else if (currentTab === "dev") {
+            parts.push(getVal("dev-repo"), getVal("dev-branch"));
+          } else if (currentTab === "media") {
+            parts.push(getVal("med-event"), getVal("med-loc"));
+          } else if (currentTab === "audio") {
+            parts.push(getVal("aud-artist"), getVal("aud-track"));
+          } else if (currentTab === "gaming") {
+            parts.push(getVal("gam-name"), getVal("gam-clip"));
           }
 
-          const dateVal = document.getElementById("global-date-val").value.replace(/-/g, "");
-          if (dateVal) p.push(dateVal);
+          const date = document.getElementById("global-date").value.replace(/-/g, "");
+          if (date) parts.push(date);
 
-          p.push(getVal("global-ver"));
+          parts.push(getVer());
 
-          const suffix = document.getElementById("global-suffix").value;
-          if (suffix === "short") p.push(randID(4));
-          else if (suffix === "mid") p.push(randID(8));
-          else if (suffix === "time") {
-            const now = new Date();
-            p.push(now.getHours().toString().padStart(2, "0") + now.getMinutes().toString().padStart(2, "0"));
-          } else if (suffix === "uuid") p.push(crypto.randomUUID().slice(0, 8));
+          const suf = document.getElementById("global-suffix").value;
+          if (suf === "short") parts.push(randID(4));
+          else if (suf === "mid") parts.push(randID(8));
+          else if (suf === "num6") parts.push(randNum(6));
+          else if (suf === "hex") parts.push(randID(6).toUpperCase());
+          else if (suf === "time") {
+            const n = new Date();
+            parts.push(n.getHours().toString().padStart(2, "0") + n.getMinutes().toString().padStart(2, "0"));
+          } else if (suf === "uuid") parts.push(crypto.randomUUID().slice(0, 8));
 
           const ext = document.getElementById("global-ext").value;
-          if (p.filter(Boolean).length === 0 && !ext) p.push("naamloos");
+          let finalParts = parts.filter((p) => p !== null && p !== undefined && p !== "");
 
-          let final = p.filter(Boolean).join(delimiter) + ext;
-          render(final);
+          // Fallback als ALLES leeg is
+          if (finalParts.length === 0 && !ext) finalParts.push("Bestand");
+
+          const resultString = finalParts.join(delimiter) + ext;
+
+          const d = document.createElement("div");
+          d.className = "flex items-center justify-between bg-slate-800/40 p-3 rounded-xl border border-slate-700/50 hover:border-indigo-500/50 transition-all";
+          d.innerHTML = `
+                    <span class="code-font text-indigo-200 text-xs md:text-sm truncate pr-4">${resultString}</span>
+                    <button onclick="copy('${resultString}')" class="p-2 text-slate-500 hover:text-white bg-slate-700/50 rounded-lg shrink-0 hover:bg-indigo-600 transition-all">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+                    </button>
+                `;
+          list.appendChild(d);
         }
-      }
-
-      function render(txt) {
-        const d = document.createElement("div");
-        d.className = "flex items-center justify-between bg-slate-800/40 p-3 rounded-xl border border-slate-700/50 group hover:border-indigo-500/50 transition-all";
-        d.innerHTML = `
-                <span class="code-font text-indigo-200 text-xs md:text-sm truncate pr-4">${txt}</span>
-                <button onclick="copy('${txt}')" class="p-2 text-slate-500 hover:text-white bg-slate-700/50 rounded-lg shrink-0 transition-all hover:bg-indigo-600">
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
-                </button>
-            `;
-        document.getElementById("resultsList").appendChild(d);
       }
 
       function copy(t) {
